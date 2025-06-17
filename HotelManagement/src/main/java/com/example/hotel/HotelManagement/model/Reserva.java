@@ -2,6 +2,7 @@ package com.example.hotel.HotelManagement.model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
