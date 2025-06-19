@@ -29,7 +29,7 @@ public class HospedeService {
     }
     public Hospede buscarHospedeDetalhado(Long id){
         return hospedesRepository.findById(id).orElseThrow(() ->
-                new RuntimeException("Não encontrado")
+                new RuntimeException("Hóspede não encontrado")
         );
     }
     public Hospede criarHospede(HospedeCriarDTO hospedeCriarDTO) {

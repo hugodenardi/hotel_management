@@ -10,7 +10,9 @@ public class Reserva {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Temporal(TemporalType.TIMESTAMP)
     private Date dataEntrada;
+    @Temporal(TemporalType.TIMESTAMP)
     private Date dataSaida;
     @ManyToOne
     private Hospede hospede;

@@ -52,10 +52,19 @@ public class QuartosService {
         //BeanUtils.copyProperties(quartoAtualizado, quarto);
         return quartosRepository.save(quarto);
     }
+
     public void deletarQuarto(Long id) {
         Quartos quarto = quartosRepository.findById(id).orElseThrow(() ->
                 new RuntimeException("Não encontrado")
         );
         quartosRepository.deleteById(id);
+    }
+
+    public void atualizarQuartoStatus(StatusQuarto statusQuarto, Long id) {
+        Quartos quarto = quartosRepository.findById(id).orElseThrow(() ->
+                new RuntimeException("Não encontrado")
+        );
+        quarto.setStatus(statusQuarto);
+        quartosRepository.save(quarto);
     }
 }

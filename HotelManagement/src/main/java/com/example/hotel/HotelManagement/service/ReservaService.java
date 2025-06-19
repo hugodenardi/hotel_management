@@ -1,4 +1,5 @@
 package com.example.hotel.HotelManagement.service;
+import com.example.hotel.HotelManagement.DTO.QuartosAtualizarDTO;
 import com.example.hotel.HotelManagement.DTO.ReservaCriarDTO;
 import com.example.hotel.HotelManagement.model.Quartos;
 import com.example.hotel.HotelManagement.model.Reserva;
@@ -14,11 +15,14 @@ import java.util.List;
 @Service
 public class ReservaService {
     private final ReservasRepository reservasRepository;
-    private final QuartosRepository quartosRepository;
+    private final QuartosService quartosService ;
+
+    private final HospedeService hospedeService;
     @Autowired
-    public ReservaService(ReservasRepository reservasRepository, QuartosRepository quartosRepository) {
+    public ReservaService(ReservasRepository reservasRepository, HospedeService hospedeService, QuartosService quartosService) {
         this.reservasRepository = reservasRepository;
-        this.quartosRepository = quartosRepository;
+        this.quartosService = quartosService;
+        this.hospedeService = hospedeService;
     }
     public List<Reserva> buscarReserva(){return reservasRepository.findAll();}
     public Reserva buscarReservaDetalhada(Long id){
@@ -27,11 +31,9 @@ public class ReservaService {
         );
     }
     public Reserva criarReserva(ReservaCriarDTO reservaCriarDTO) {
+        hospedeService.buscarHospedeDetalhado(reservaCriarDTO.getHospede().getId());
+        Quartos quarto = quartosService.buscarQuartoDetalhado(reservaCriarDTO.getQuarto().getId());
 
-        Quartos quarto = quartosRepository.findById(reservaCriarDTO.getQuarto().getId())
-                .orElseThrow(() ->
-                        new RuntimeException("Não encontrado")
-                );
         if (quarto.getStatus() != StatusQuarto.DISPONIVEL) {
             throw new RuntimeException("Quarto indisponível para reserva.");
         }
@@ -54,8 +56,7 @@ public class ReservaService {
         reserva.setHospede(reservaCriarDTO.getHospede());
         reserva.setQuarto(reservaCriarDTO.getQuarto());
         reservasRepository.save(reserva);
-        quarto.setStatus(StatusQuarto.OCUPADO);
-        quartosRepository.save(quarto);
+        quartosService.atualizarQuartoStatus(StatusQuarto.OCUPADO, quarto.getId());
         return reserva;
     }
     public Reserva atualizarReservaCancelada(Long id) {
@@ -65,8 +66,7 @@ public class ReservaService {
         reserva.setStatus(StatusReserva.CANCELADA);
         reservasRepository.save(reserva);
         Quartos quarto = reserva.getQuarto();
-        quarto.setStatus(StatusQuarto.DISPONIVEL);
-        quartosRepository.save(quarto);
+        quartosService.atualizarQuartoStatus(StatusQuarto.DISPONIVEL, quarto.getId());
         return reserva;
     }
     public Reserva atualizarReservaConcluida(Long id) {
@@ -76,8 +76,7 @@ public class ReservaService {
         reserva.setStatus(StatusReserva.CONCLUIDA);
         reservasRepository.save(reserva);
         Quartos quarto = reserva.getQuarto();
-        quarto.setStatus(StatusQuarto.DISPONIVEL);
-        quartosRepository.save(quarto);
+        quartosService.atualizarQuartoStatus(StatusQuarto.DISPONIVEL, quarto.getId());
         return reserva;
 
     }
