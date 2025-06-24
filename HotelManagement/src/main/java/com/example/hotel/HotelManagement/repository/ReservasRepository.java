@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ReservasRepository extends JpaRepository<Reserva, Long> {
@@ -14,6 +16,11 @@ public interface ReservasRepository extends JpaRepository<Reserva, Long> {
             Long quartoId,
             Date dataSaida,
             Date dataEntrada,
+            StatusReserva status
+    );
+
+    Optional<List<Reserva>> findAllByHospedeDocumentoAndStatus(
+            String documento,
             StatusReserva status
     );
 

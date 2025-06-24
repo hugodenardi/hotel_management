@@ -37,5 +37,8 @@ public class ReservaController {
     public Reserva atualizarReservaConcluida(@PathVariable Long id) {
         return reservaService.atualizarReservaConcluida(id);
     }
-
+    @GetMapping("/hospede")
+    public List<Reserva> buscarReservaHospede(@RequestParam String documento) {
+        return reservaService.buscarReservaHospede(documento);
+    }
 }

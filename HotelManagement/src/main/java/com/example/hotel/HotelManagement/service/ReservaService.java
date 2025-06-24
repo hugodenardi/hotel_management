@@ -56,7 +56,6 @@ public class ReservaService {
         reserva.setHospede(reservaCriarDTO.getHospede());
         reserva.setQuarto(reservaCriarDTO.getQuarto());
         reservasRepository.save(reserva);
-        quartosService.atualizarQuartoStatus(StatusQuarto.OCUPADO, quarto.getId());
         return reserva;
     }
     public Reserva atualizarReservaCancelada(Long id) {
@@ -79,5 +78,11 @@ public class ReservaService {
         quartosService.atualizarQuartoStatus(StatusQuarto.DISPONIVEL, quarto.getId());
         return reserva;
 
+    }
+
+    public List<Reserva> buscarReservaHospede(String documento) {
+        return reservasRepository.findAllByHospedeDocumentoAndStatus(documento, StatusReserva.ATIVA).orElseThrow(() ->
+                new RuntimeException("Não existe reserva para este documento")
+        );
     }
 }
