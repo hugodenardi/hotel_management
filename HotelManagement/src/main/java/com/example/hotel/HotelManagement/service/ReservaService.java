@@ -10,6 +10,8 @@ import com.example.hotel.HotelManagement.repository.ReservasRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -38,8 +40,16 @@ public class ReservaService {
             throw new RuntimeException("Quarto indisponível para reserva.");
         }
         Reserva reserva = new Reserva();
+        Date dataAtual = new Date();
+
         reserva.setDataEntrada(reservaCriarDTO.getDataEntrada());
         reserva.setDataSaida(reservaCriarDTO.getDataSaida());
+        if (dataAtual.after(reserva.getDataEntrada())) {
+            throw new RuntimeException("A data de entrada precisa ser posterior a data atual");
+        }
+        if (reserva.getDataEntrada().after(reserva.getDataSaida())) {
+            throw new RuntimeException("A data de saída precisa ser posterior a data de entrada");
+        }
         boolean reservaExistente = reservasRepository.existsByQuartoIdAndDataEntradaLessThanEqualAndDataSaidaGreaterThanEqualAndStatus(
                 quarto.getId(),
                 reserva.getDataSaida(),
@@ -81,8 +91,30 @@ public class ReservaService {
     }
 
     public List<Reserva> buscarReservaHospede(String documento) {
-        return reservasRepository.findAllByHospedeDocumentoAndStatus(documento, StatusReserva.ATIVA).orElseThrow(() ->
-                new RuntimeException("Não existe reserva para este documento")
+        List<Reserva> reservas = reservasRepository.findAllByHospedeDocumentoAndStatus(documento, StatusReserva.ATIVA);
+        if (reservas.isEmpty()) {
+            throw new RuntimeException("Nenhuma reserva encontrada para o documento " + documento);
+        }
+        return reservas;
+    }
+    public Reserva buscarReserva(Long id) {
+        return reservasRepository.findById(id).orElseThrow(() ->
+                new RuntimeException("Reserva não encontrada")
         );
+    }
+    public Reserva checkin(Long id) {
+        Reserva reserva = buscarReserva(id);
+        reserva.getQuarto().setStatus(StatusQuarto.OCUPADO);
+        return reservasRepository.save(reserva);
+    }
+    public Reserva checkout(Long id) {
+        Reserva reserva = buscarReserva(id);
+        Date dataAtual = new Date();
+        if (dataAtual.before(reserva.getDataSaida())) {
+            throw new RuntimeException("Você não pode sair até a data de saída " + reserva.getDataSaida());
+        }
+        reserva.getQuarto().setStatus(StatusQuarto.DISPONIVEL);
+        reserva.setStatus(StatusReserva.CONCLUIDA);
+        return reservasRepository.save(reserva);
     }
 }

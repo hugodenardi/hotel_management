@@ -41,4 +41,12 @@ public class ReservaController {
     public List<Reserva> buscarReservaHospede(@RequestParam String documento) {
         return reservaService.buscarReservaHospede(documento);
     }
+    @PutMapping("/{id}/checkin")
+    public Reserva checkin(@PathVariable Long id) {
+        return reservaService.checkin(id);
+    }
+    @PutMapping("/{id}/checkout")
+    public Reserva checkout(@PathVariable Long id) {
+        return reservaService.checkout(id);
+    }
 }

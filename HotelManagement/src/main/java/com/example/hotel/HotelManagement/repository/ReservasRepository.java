@@ -6,6 +6,7 @@ import com.example.hotel.HotelManagement.model.StatusReserva;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +20,7 @@ public interface ReservasRepository extends JpaRepository<Reserva, Long> {
             StatusReserva status
     );
 
-    Optional<List<Reserva>> findAllByHospedeDocumentoAndStatus(
+    List<Reserva> findAllByHospedeDocumentoAndStatus(
             String documento,
             StatusReserva status
     );
