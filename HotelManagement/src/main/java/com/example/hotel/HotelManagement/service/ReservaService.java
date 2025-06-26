@@ -44,9 +44,9 @@ public class ReservaService {
 
         reserva.setDataEntrada(reservaCriarDTO.getDataEntrada());
         reserva.setDataSaida(reservaCriarDTO.getDataSaida());
-        if (dataAtual.after(reserva.getDataEntrada())) {
-            throw new RuntimeException("A data de entrada precisa ser posterior a data atual");
-        }
+//        if (dataAtual.after(reserva.getDataEntrada())) {
+//            throw new RuntimeException("A data de entrada precisa ser posterior a data atual");
+//        }
         if (reserva.getDataEntrada().after(reserva.getDataSaida())) {
             throw new RuntimeException("A data de saída precisa ser posterior a data de entrada");
         }
@@ -112,6 +112,10 @@ public class ReservaService {
         Date dataAtual = new Date();
         if (dataAtual.before(reserva.getDataSaida())) {
             throw new RuntimeException("Você não pode sair até a data de saída " + reserva.getDataSaida());
+        }
+
+        if (reserva.getQuarto().getStatus() != StatusQuarto.OCUPADO) {
+            throw new RuntimeException("O checkout só poder feito se tiver sido feito checkin");
         }
         reserva.getQuarto().setStatus(StatusQuarto.DISPONIVEL);
         reserva.setStatus(StatusReserva.CONCLUIDA);
