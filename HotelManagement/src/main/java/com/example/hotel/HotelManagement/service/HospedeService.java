@@ -4,6 +4,7 @@ import com.example.hotel.HotelManagement.DTO.HospedeAtualizarDTO;
 import com.example.hotel.HotelManagement.DTO.HospedeCriarDTO;
 import com.example.hotel.HotelManagement.DTO.QuartosAtualizarDTO;
 import com.example.hotel.HotelManagement.DTO.QuartosCriarDTO;
+import com.example.hotel.HotelManagement.exception.HospedeNaoEcontradoException;
 import com.example.hotel.HotelManagement.model.Hospede;
 import com.example.hotel.HotelManagement.model.Quartos;
 import com.example.hotel.HotelManagement.model.StatusQuarto;
@@ -28,8 +29,7 @@ public class HospedeService {
         return hospedesRepository.findAll();
     }
     public Hospede buscarHospedeDetalhado(Long id){
-        return hospedesRepository.findById(id).orElseThrow(() ->
-                new RuntimeException("Hóspede não encontrado")
+        return hospedesRepository.findById(id).orElseThrow(HospedeNaoEcontradoException::new
         );
     }
     public Hospede criarHospede(HospedeCriarDTO hospedeCriarDTO) {
@@ -42,9 +42,7 @@ public class HospedeService {
         return hospede;
     }
     public Hospede atualizarHospede(HospedeAtualizarDTO hospedeAtualizado, Long id) {
-        Hospede hospede = hospedesRepository.findById(id).orElseThrow(() ->
-                new RuntimeException("Não encontrado")
-        );
+        Hospede hospede = buscarHospedeDetalhado(id);
         hospede.setNome(hospedeAtualizado.getNome());
         hospede.setDocumento(hospedeAtualizado.getDocumento());
         hospede.setTelefone(hospedeAtualizado.getTelefone());
@@ -53,9 +51,7 @@ public class HospedeService {
         return hospedesRepository.save(hospede);
     }
     public void deletarHospede(Long id) {
-        Hospede hospede = hospedesRepository.findById(id).orElseThrow(() ->
-                new RuntimeException("Não encontrado")
-        );
+        Hospede hospede = buscarHospedeDetalhado(id);
         hospedesRepository.deleteById(id);
     }
 }
