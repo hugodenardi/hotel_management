@@ -2,28 +2,23 @@ package com.example.hotel.HotelManagement.service;
 
 import com.example.hotel.HotelManagement.DTO.HospedeAtualizarDTO;
 import com.example.hotel.HotelManagement.DTO.HospedeCriarDTO;
-import com.example.hotel.HotelManagement.DTO.QuartosAtualizarDTO;
-import com.example.hotel.HotelManagement.DTO.QuartosCriarDTO;
 import com.example.hotel.HotelManagement.exception.HospedeNaoEcontradoException;
+import com.example.hotel.HotelManagement.mapper.HospedeMapper;
 import com.example.hotel.HotelManagement.model.Hospede;
-import com.example.hotel.HotelManagement.model.Quartos;
-import com.example.hotel.HotelManagement.model.StatusQuarto;
 import com.example.hotel.HotelManagement.repository.HospedesRepository;
-import com.example.hotel.HotelManagement.repository.QuartosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class HospedeService {
     private final HospedesRepository hospedesRepository;
+    private final HospedeMapper hospedeMapper;
     @Autowired
-    public HospedeService(HospedesRepository hospedesRepository) {
+    public HospedeService(HospedesRepository hospedesRepository, HospedeMapper hospedeMapper) {
         this.hospedesRepository = hospedesRepository;
+        this.hospedeMapper = hospedeMapper;
     }
     public List<Hospede> buscarHospedes() {
         return hospedesRepository.findAll();
@@ -32,23 +27,16 @@ public class HospedeService {
         return hospedesRepository.findById(id).orElseThrow(HospedeNaoEcontradoException::new
         );
     }
-    public Hospede criarHospede(HospedeCriarDTO hospedeCriarDTO) {
-        Hospede hospede = new Hospede();
-        hospede.setNome(hospedeCriarDTO.getNome());
-        hospede.setDocumento(hospedeCriarDTO.getDocumento());
-        hospede.setTelefone(hospedeCriarDTO.getTelefone());
-        hospede.setEmail(hospedeCriarDTO.getEmail());
-        hospedesRepository.save(hospede);
-        return hospede;
+    public HospedeCriarDTO criarHospede(HospedeCriarDTO hospedeDTO) {
+        Hospede hospede = hospedeMapper.toModelCriar(hospedeDTO);
+        hospede = hospedesRepository.save(hospede);
+        return hospedeMapper.toDTOCriar(hospede);
     }
-    public Hospede atualizarHospede(HospedeAtualizarDTO hospedeAtualizado, Long id) {
+    public HospedeAtualizarDTO atualizarHospede(HospedeAtualizarDTO hospedeAtualizarDTO, Long id) {
         Hospede hospede = buscarHospedeDetalhado(id);
-        hospede.setNome(hospedeAtualizado.getNome());
-        hospede.setDocumento(hospedeAtualizado.getDocumento());
-        hospede.setTelefone(hospedeAtualizado.getTelefone());
-        hospede.setEmail(hospedeAtualizado.getEmail());
-        //BeanUtils.copyProperties(quartoAtualizado, quarto);
-        return hospedesRepository.save(hospede);
+        hospede = hospedeMapper.toModelAtualizar(hospede, hospedeAtualizarDTO);
+        hospede = hospedesRepository.save(hospede);
+        return hospedeMapper.toDTOAtualizar(hospede);
     }
     public void deletarHospede(Long id) {
         Hospede hospede = buscarHospedeDetalhado(id);

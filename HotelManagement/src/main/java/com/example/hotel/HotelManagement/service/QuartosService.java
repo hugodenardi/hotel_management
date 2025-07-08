@@ -3,6 +3,7 @@ package com.example.hotel.HotelManagement.service;
 import com.example.hotel.HotelManagement.DTO.QuartosAtualizarDTO;
 import com.example.hotel.HotelManagement.DTO.QuartosCriarDTO;
 import com.example.hotel.HotelManagement.exception.QuartoNaoEncontradoException;
+import com.example.hotel.HotelManagement.mapper.QuartoMapper;
 import com.example.hotel.HotelManagement.model.Quartos;
 import com.example.hotel.HotelManagement.model.Reserva;
 import com.example.hotel.HotelManagement.model.StatusQuarto;
@@ -17,9 +18,11 @@ import java.util.Optional;
 @Service
 public class QuartosService {
     private final QuartosRepository quartosRepository;
+    private final  QuartoMapper quartoMapper;
     @Autowired
-    public QuartosService(QuartosRepository quartosRepository) {
+    public QuartosService(QuartosRepository quartosRepository, QuartoMapper quartoMapper) {
         this.quartosRepository = quartosRepository;
+        this.quartoMapper = quartoMapper;
     }
 
     public List<Quartos> buscarQuartos() {
@@ -32,23 +35,16 @@ public class QuartosService {
         return quartosRepository.findById(id).orElseThrow(QuartoNaoEncontradoException::new
         );
     }
-    public Quartos criarQuarto(QuartosCriarDTO quartosDTO) {
-        Quartos quartos = new Quartos();
-        quartos.setNumero(quartosDTO.getNumero());
-        quartos.setTipo(quartosDTO.getTipo());
-        quartos.setStatus(StatusQuarto.DISPONIVEL);
-        quartos.setPrecoDiaria(quartosDTO.getPrecoDiaria());
-        quartosRepository.save(quartos);
-        return quartos;
+    public QuartosCriarDTO criarQuarto(QuartosCriarDTO quartosDTO) {
+        Quartos quartos = new Quartos(quartosDTO);
+        quartos = quartosRepository.save(quartos);
+        return quartoMapper.toDTOCriar(quartos);
     }
-    public Quartos atualizarQuarto(QuartosAtualizarDTO quartoAtualizado, Long id) {
+    public QuartosAtualizarDTO atualizarQuarto(QuartosAtualizarDTO quartoAtualizado, Long id) {
         Quartos quarto = buscarQuartoDetalhado(id);
-        quarto.setNumero(quartoAtualizado.getNumero());
-        quarto.setTipo(quartoAtualizado.getTipo());
-        quarto.setStatus(quartoAtualizado.getStatus());
-        quarto.setPrecoDiaria(quartoAtualizado.getPrecoDiaria());
-        //BeanUtils.copyProperties(quartoAtualizado, quarto);
-        return quartosRepository.save(quarto);
+        quarto.Atualizar(quartoAtualizado);
+        quarto =  quartosRepository.save(quarto);
+        return quartoMapper.toDTOAtualizar(quarto);
     }
 
     public void deletarQuarto(Long id) {

@@ -1,5 +1,7 @@
 package com.example.hotel.HotelManagement.model;
 
+import com.example.hotel.HotelManagement.DTO.QuartosAtualizarDTO;
+import com.example.hotel.HotelManagement.DTO.QuartosCriarDTO;
 import jakarta.persistence.*;
 
 @Entity
@@ -14,6 +16,19 @@ public class Quartos {
     @Enumerated(EnumType.STRING)
     private StatusQuarto status;
     private double precoDiaria;
+
+    public Quartos(QuartosCriarDTO quartosDTO) {
+        setNumero(quartosDTO.getNumero());
+        setTipo(quartosDTO.getTipo());
+        setStatus(StatusQuarto.DISPONIVEL);
+        setPrecoDiaria(quartosDTO.getPrecoDiaria());
+    }
+    public void Atualizar(QuartosAtualizarDTO quartosDTO) {
+        setNumero(quartosDTO.getNumero());
+        setTipo(quartosDTO.getTipo());
+        setStatus(quartosDTO.getStatus());
+        setPrecoDiaria(quartosDTO.getPrecoDiaria());
+    }
 
     public Long getId() {
         return id;

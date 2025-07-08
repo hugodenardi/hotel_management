@@ -33,11 +33,11 @@ public class QuartosController {
         return quartosService.buscarQuartoDetalhado(id);
     }
     @PostMapping
-    public Quartos criarQuarto(@RequestBody @Valid QuartosCriarDTO quartos) {
+    public QuartosCriarDTO criarQuarto(@RequestBody @Valid QuartosCriarDTO quartos) {
         return quartosService.criarQuarto(quartos);
     }
     @PutMapping("/{id}")
-    public Quartos atualizarQuarto(@RequestBody @Valid QuartosAtualizarDTO quartoAtualizado, @PathVariable Long id) {
+    public QuartosAtualizarDTO atualizarQuarto(@RequestBody @Valid QuartosAtualizarDTO quartoAtualizado, @PathVariable Long id) {
         return quartosService.atualizarQuarto(quartoAtualizado, id);
     }
     @DeleteMapping("/{id}")

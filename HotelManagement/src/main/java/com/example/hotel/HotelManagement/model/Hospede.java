@@ -1,9 +1,6 @@
 package com.example.hotel.HotelManagement.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Hospede {
@@ -11,6 +8,7 @@ public class Hospede {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
+    @Column(unique = true)
     private String documento;
     private String telefone;
     private String email;

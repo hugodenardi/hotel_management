@@ -32,11 +32,11 @@ public class HospedeController {
         return hospedeService.buscarHospedeDetalhado(id);
     }
     @PostMapping
-    public Hospede criarHospede (@RequestBody @Valid HospedeCriarDTO hospede) {
+    public HospedeCriarDTO criarHospede (@RequestBody @Valid HospedeCriarDTO hospede) {
         return hospedeService.criarHospede(hospede);
     }
     @PutMapping("/{id}")
-    public Hospede atualizarHospede(@RequestBody @Valid HospedeAtualizarDTO hospedeAtualizado, @PathVariable Long id) {
+    public HospedeAtualizarDTO atualizarHospede(@RequestBody @Valid HospedeAtualizarDTO hospedeAtualizado, @PathVariable Long id) {
         return hospedeService.atualizarHospede(hospedeAtualizado, id);
     }
     @DeleteMapping("/{id}")
