@@ -1,14 +1,18 @@
 package com.example.hotel.HotelManagement.controller;
 
+import com.example.hotel.HotelManagement.DTO.QuartoDTO;
 import com.example.hotel.HotelManagement.DTO.QuartosAtualizarDTO;
 import com.example.hotel.HotelManagement.DTO.QuartosCriarDTO;
 import com.example.hotel.HotelManagement.model.Quartos;
 import com.example.hotel.HotelManagement.model.Reserva;
+import com.example.hotel.HotelManagement.model.TipoQuarto;
 import com.example.hotel.HotelManagement.service.QuartosService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,5 +47,14 @@ public class QuartosController {
     @DeleteMapping("/{id}")
     public void deletarQuarto(@PathVariable Long id) {
         quartosService.deletarQuarto(id);
+    }
+
+    @GetMapping("/disponiveis/filtros")
+    public List<QuartoDTO> buscarQuartosComFiltros(
+            @RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy")Date dataEntrada,
+            @RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy")Date dataSaida,
+            @RequestParam TipoQuarto tipo
+            ) {
+        return quartosService.buscarQuartosComFiltros(dataEntrada, dataSaida, tipo);
     }
 }

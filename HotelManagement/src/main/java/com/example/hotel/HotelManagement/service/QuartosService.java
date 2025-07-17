@@ -1,28 +1,34 @@
 package com.example.hotel.HotelManagement.service;
 
+import com.example.hotel.HotelManagement.DTO.QuartoDTO;
 import com.example.hotel.HotelManagement.DTO.QuartosAtualizarDTO;
 import com.example.hotel.HotelManagement.DTO.QuartosCriarDTO;
 import com.example.hotel.HotelManagement.exception.QuartoNaoEncontradoException;
 import com.example.hotel.HotelManagement.mapper.QuartoMapper;
 import com.example.hotel.HotelManagement.model.Quartos;
-import com.example.hotel.HotelManagement.model.Reserva;
 import com.example.hotel.HotelManagement.model.StatusQuarto;
+import com.example.hotel.HotelManagement.model.StatusReserva;
+import com.example.hotel.HotelManagement.model.TipoQuarto;
 import com.example.hotel.HotelManagement.repository.QuartosRepository;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class QuartosService {
     private final QuartosRepository quartosRepository;
     private final  QuartoMapper quartoMapper;
+    private final ReservaService reservaService;
     @Autowired
-    public QuartosService(QuartosRepository quartosRepository, QuartoMapper quartoMapper) {
+    @Lazy
+    public QuartosService(QuartosRepository quartosRepository, QuartoMapper quartoMapper, ReservaService reservaService) {
         this.quartosRepository = quartosRepository;
         this.quartoMapper = quartoMapper;
+        this.reservaService = reservaService;
     }
 
     public List<Quartos> buscarQuartos() {
@@ -34,6 +40,17 @@ public class QuartosService {
     public Quartos buscarQuartoDetalhado(Long id){
         return quartosRepository.findById(id).orElseThrow(QuartoNaoEncontradoException::new
         );
+    }
+    public List<QuartoDTO> buscarQuartosComFiltros(Date dataEntrada, Date dataSaida, TipoQuarto tipo) {
+        List<Quartos> quartos = quartosRepository.findAllByTipo(tipo);
+        List<QuartoDTO> quartosValidos = new ArrayList<>();
+
+        for(Quartos quarto: quartos) {
+            if(!reservaService.verificarReservaPorDatas(dataEntrada, dataSaida, quarto.getId(), StatusReserva.ATIVA)) {
+                quartosValidos.add(quartoMapper.toDTO(quarto));
+            }
+        }
+        return quartosValidos;
     }
     public QuartosCriarDTO criarQuarto(QuartosCriarDTO quartosDTO) {
         Quartos quartos = new Quartos(quartosDTO);
@@ -57,4 +74,5 @@ public class QuartosService {
         quarto.setStatus(statusQuarto);
         quartosRepository.save(quarto);
     }
+
 }

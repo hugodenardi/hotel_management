@@ -9,6 +9,7 @@ import com.example.hotel.HotelManagement.model.StatusReserva;
 import com.example.hotel.HotelManagement.repository.QuartosRepository;
 import com.example.hotel.HotelManagement.repository.ReservasRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -22,6 +23,7 @@ public class ReservaService {
 
     private final HospedeService hospedeService;
     @Autowired
+    @Lazy
     public ReservaService(ReservasRepository reservasRepository, HospedeService hospedeService, QuartosService quartosService) {
         this.reservasRepository = reservasRepository;
         this.quartosService = quartosService;
@@ -116,5 +118,8 @@ public class ReservaService {
         reserva.getQuarto().setStatus(StatusQuarto.DISPONIVEL);
         reserva.setStatus(StatusReserva.CONCLUIDA);
         return reservasRepository.save(reserva);
+    }
+    public boolean verificarReservaPorDatas(Date dataEntrada, Date dataSaida, Long quartoId, StatusReserva status) {
+        return reservasRepository.existsByQuartoIdAndDataEntradaLessThanEqualAndDataSaidaGreaterThanEqualAndStatus(quartoId, dataSaida, dataEntrada, status);
     }
 }

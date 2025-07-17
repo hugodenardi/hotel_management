@@ -1,5 +1,6 @@
 package com.example.hotel.HotelManagement.mapper;
 
+import com.example.hotel.HotelManagement.DTO.QuartoDTO;
 import com.example.hotel.HotelManagement.DTO.QuartosAtualizarDTO;
 import com.example.hotel.HotelManagement.DTO.QuartosCriarDTO;
 import com.example.hotel.HotelManagement.model.Quartos;
@@ -22,5 +23,14 @@ public class QuartoMapper {
         quartoAtualizarDTO.setStatus((quartos.getStatus()));
         quartoAtualizarDTO.setPrecoDiaria(quartos.getPrecoDiaria());
         return quartoAtualizarDTO;
+    }
+    public QuartoDTO toDTO(Quartos quarto) {
+        QuartoDTO quartoDTO = new QuartoDTO();
+        quartoDTO.setId(quarto.getId());
+        quartoDTO.setNumero(quarto.getNumero());
+        quartoDTO.setTipo(quartoDTO.getTipo());
+        quartoDTO.setStatus(quartoDTO.getStatus());
+        quartoDTO.setPrecoDiaria(quartoDTO.getPrecoDiaria());
+        return quartoDTO;
     }
 }

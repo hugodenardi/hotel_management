@@ -17,6 +17,9 @@ public class Quartos {
     private StatusQuarto status;
     private double precoDiaria;
 
+    public Quartos() {
+    }
+
     public Quartos(QuartosCriarDTO quartosDTO) {
         setNumero(quartosDTO.getNumero());
         setTipo(quartosDTO.getTipo());
