@@ -11,6 +11,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/reservas")
+@CrossOrigin(origins = "http://localhost:8081")
 public class ReservaController {
     @Autowired
     private final ReservaService reservaService;

@@ -18,6 +18,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/quartos")
+@CrossOrigin(origins = "http://localhost:8081")
 public class QuartosController {
     @Autowired
     private final QuartosService quartosService;
@@ -49,10 +50,10 @@ public class QuartosController {
         quartosService.deletarQuarto(id);
     }
 
-    @GetMapping("/disponiveis/filtros")
+    @GetMapping("/disponiveis/filtro")
     public List<QuartoDTO> buscarQuartosComFiltros(
-            @RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy")Date dataEntrada,
-            @RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy")Date dataSaida,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd")Date dataEntrada,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd")Date dataSaida,
             @RequestParam TipoQuarto tipo
             ) {
         return quartosService.buscarQuartosComFiltros(dataEntrada, dataSaida, tipo);

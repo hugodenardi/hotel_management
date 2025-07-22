@@ -17,6 +17,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/hospedes")
+@CrossOrigin(origins = "http://localhost:8081")
 public class HospedeController {
     @Autowired
     private final HospedeService hospedeService;

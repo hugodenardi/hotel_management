@@ -10,6 +10,7 @@ import com.example.hotel.HotelManagement.model.StatusQuarto;
 import com.example.hotel.HotelManagement.model.StatusReserva;
 import com.example.hotel.HotelManagement.model.TipoQuarto;
 import com.example.hotel.HotelManagement.repository.QuartosRepository;
+import com.example.hotel.HotelManagement.utils.FormatarData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;

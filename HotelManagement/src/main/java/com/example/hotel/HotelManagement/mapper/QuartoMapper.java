@@ -28,9 +28,9 @@ public class QuartoMapper {
         QuartoDTO quartoDTO = new QuartoDTO();
         quartoDTO.setId(quarto.getId());
         quartoDTO.setNumero(quarto.getNumero());
-        quartoDTO.setTipo(quartoDTO.getTipo());
-        quartoDTO.setStatus(quartoDTO.getStatus());
-        quartoDTO.setPrecoDiaria(quartoDTO.getPrecoDiaria());
+        quartoDTO.setTipo(String.valueOf(quarto.getTipo()));
+        quartoDTO.setStatus(String.valueOf(quarto.getStatus()));
+        quartoDTO.setPrecoDiaria(quarto.getPrecoDiaria());
         return quartoDTO;
     }
 }
