@@ -1,26 +1,38 @@
 package com.example.hotel.HotelManagement.DTO;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
-public class HospedeCriarDTO {
-    @NotBlank(message = "O nome do hóspede é obrigatório")
+public class UsuarioCriarDTO {
+    @NotBlank(message = "O usuário é obrigatório")
+    private String usuario;
+    @NotBlank(message = "A senha é obrigatório")
+    private String senha;
+    @NotBlank(message = "O nome é obrigatório")
     private String nome;
-    @NotBlank(message = "O documento do hóspede é obrigatório")
+    @NotBlank(message = "O documento é obrigatório")
     private String documento;
-    @NotBlank(message = "O telefone do hóspede é obrigatório")
+    @NotBlank(message = "O telefone é obrigatório")
     private String telefone;
-    @NotBlank(message = "O email do hóspede é obrigatório")
-    @Email(message = "O campo deve ser preenchido com um endereço de e-mail válido")
+    @NotBlank(message = "O e-mail é obrigatório")
+    @Email(message = "Digite um e-mail válido")
     private String email;
-    private Long usuario;
 
-    public Long getUsuario() {
+    public String getUsuario() {
         return usuario;
     }
 
-    public void setUsuario(Long usuario) {
+    public void setUsuario(String usuario) {
         this.usuario = usuario;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 
     public String getNome() {

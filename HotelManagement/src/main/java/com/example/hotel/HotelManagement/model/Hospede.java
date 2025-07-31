@@ -12,6 +12,15 @@ public class Hospede {
     private String documento;
     private String telefone;
     private String email;
+    private Long usuario;
+
+    public Long getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Long usuario) {
+        this.usuario = usuario;
+    }
 
     public Long getId() {
         return id;

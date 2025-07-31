@@ -13,6 +13,7 @@ public class HospedeMapper {
         hospede.setDocumento(hospedeCriarDTO.getDocumento());
         hospede.setTelefone(hospedeCriarDTO.getTelefone());
         hospede.setEmail(hospedeCriarDTO.getEmail());
+        hospede.setUsuario(hospedeCriarDTO.getUsuario());
         return hospede;
     }
 

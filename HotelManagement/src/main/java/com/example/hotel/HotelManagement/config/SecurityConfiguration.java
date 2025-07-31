@@ -30,9 +30,8 @@ public class SecurityConfiguration {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.GET,"/quartos/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/hospedes").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/usuarios/hospede").permitAll()
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/quartos/**").permitAll()
                         .anyRequest().authenticated()
 
                 ).addFilterBefore(jwtAuthenticationMiddleware, UsernamePasswordAuthenticationFilter.class).build();

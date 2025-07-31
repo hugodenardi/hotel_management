@@ -16,6 +16,7 @@ public class Usuario implements UserDetails {
     @Column(unique = true)
     private String usuario;
     private String senha;
+    private RoleEnum role;
 
     public Long getId() {
         return id;
