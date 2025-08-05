@@ -44,7 +44,7 @@ public class Usuario implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("USUARIO COMUM"));
+        return List.of(new SimpleGrantedAuthority(this.role.toString()));
     }
 
     @Override
@@ -55,5 +55,13 @@ public class Usuario implements UserDetails {
     @Override
     public String getUsername() {
         return this.usuario;
+    }
+
+    public RoleEnum getRole() {
+        return role;
+    }
+
+    public void setRole(RoleEnum role) {
+        this.role = role;
     }
 }
